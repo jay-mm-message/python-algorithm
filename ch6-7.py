@@ -48,6 +48,42 @@ class Node():
       return self.right.search(val)
     else:
       return str(val) + " have found"
+class Delete_Node():
+  def del_node(self, root, key):
+
+    # find node 
+    if root is None:
+      return None
+    if key < root.data:
+      root.left = self.del_node(root.left, key)
+      return root
+    if key > root.data:
+      root.right = self.del_node(root.right, key)
+      return root
+    if root.left is None:
+      new_root = root.right
+      return new_root
+    if root.right is None:
+      new_root = root.left
+      return new_root
+
+    # delete node
+    succ = self.max_node(root.left)
+    tmp = Node(succ.data)
+    tmp.left = self.left_node(root.left)
+    tmp.right = root.right
+    return tmp
+    
+  def left_node(self, node):
+    if node.right is None:
+      new_root = node.left
+      return new_root
+    node.right = self.left_node(node.right)
+    return node
+  def max_node(self, node):
+    while node.right:
+      node = node.right
+    return node
 
 tree = Node()
 datas = [10, 21, 5, 9, 13, 28]
@@ -65,3 +101,11 @@ tree.postorder()
 print("search")
 print(tree.search(13))
 print(tree.search(100))
+
+print("inorder")
+tree.inorder()
+del_data = 5
+print("del data is %d" % (del_data))
+delete_obj = Delete_Node()
+result = delete_obj.del_node(tree, del_data)
+result.inorder()
